@@ -397,6 +397,12 @@ drake_config <- function(
   } else {
     graph <- prune_drake_graph(graph = graph, to = targets, jobs = jobs)
   }
+  envir <- expose_envir(
+    from = envir,
+    to = new.env(parent = globalenv()),
+    jobs = jobs,
+    keep = setdiff(V(graph)$name, plan$target)
+  )
   cache_path <- force_cache_path(cache)
   lazy_load <- parse_lazy_arg(lazy_load)
   list(
